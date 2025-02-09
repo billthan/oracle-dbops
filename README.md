@@ -23,5 +23,5 @@ To run DDL export, run the `EXPORT_DDL_DRIVER.sql` in Oracle as `dba`
 # Contributors
 
 * Bill Than
-* Nathan Ackerson
-* Joshua Wry
+* [Nathan Ackerson](https://www.linkedin.com/in/nathan-ackerson-66aa68197)
+* [Joshua Wry](https://www.linkedin.com/in/jw1999/)
