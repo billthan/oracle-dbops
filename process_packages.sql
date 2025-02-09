@@ -1,0 +1,140 @@
+-- Process Packages
+FOR rec_pkg IN (
+    SELECT object_name
+    FROM dba_objects
+    WHERE owner = v_schema_name
+    AND object_type = 'PACKAGE'
+)
+LOOP
+    BEGIN
+    v_object_name := rec_pkg.object_name;
+
+    -- Process PACKAGE spec
+    BEGIN
+        -- Get the DDL for the package spec
+        v_ddl_clob := DBMS_METADATA.get_ddl('PACKAGE_SPEC', v_object_name, v_schema_name);
+
+        -- Check if the retrieved DDL is empty
+        IF v_ddl_clob IS NULL THEN
+            v_error_message := 'DDL retrieval returned NULL for PACKAGE_SPEC ' || v_schema_name || '.' || v_object_name;
+            UTL_FILE.PUT_LINE(v_error_log, v_error_message);
+            CONTINUE;
+        END IF;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            v_error_message := 'Error getting DDL for PACKAGE_SPEC ' || v_schema_name || '.' || v_object_name || ': ' || SQLERRM;
+            UTL_FILE.PUT_LINE(v_error_log, v_error_message);
+            CONTINUE;
+    END;
+
+    -- Replace spaces with underscores in the file name
+    v_file_name := REPLACE(v_schema_name || '_PACKAGE_SPEC_' || v_object_name || '.sql', ' ', '_');
+
+    BEGIN
+        -- Open the file to write the package spec DDL
+        v_file := UTL_FILE.FOPEN(v_package_dir, v_file_name, 'w', 32767);
+
+        -- Initialize variables for reading the CLOB
+        DECLARE
+            v_offset      NUMBER := 1;
+            v_chunk_size  NUMBER := 32767;
+            v_clob_length NUMBER := DBMS_LOB.GETLENGTH(v_ddl_clob);
+            v_buffer      VARCHAR2(32767);
+        BEGIN
+            -- Read and write the CLOB in chunks
+            WHILE v_offset <= v_clob_length LOOP
+                IF v_offset + v_chunk_size - 1 > v_clob_length THEN
+                v_chunk_size := v_clob_length - v_offset + 1;
+                END IF;
+
+                DBMS_LOB.READ(v_ddl_clob, v_chunk_size, v_offset, v_buffer);
+                UTL_FILE.PUT(v_file, v_buffer);
+
+                v_offset := v_offset + v_chunk_size;
+            END LOOP;
+        END;
+
+        -- Close the file
+        UTL_FILE.FCLOSE(v_file);
+
+        -- Increment the file count
+        v_file_count := v_file_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            v_error_message := 'Error writing DDL to file for PACKAGE_SPEC ' || v_schema_name || '.' || v_object_name || ': ' || SQLERRM;
+            UTL_FILE.PUT_LINE(v_error_log, v_error_message);
+            IF UTL_FILE.IS_OPEN(v_file) THEN
+                UTL_FILE.FCLOSE(v_file);
+            END IF;
+    END;
+
+    -- Process PACKAGE body
+    BEGIN
+        -- Get the DDL for the package body
+        v_ddl_clob := DBMS_METADATA.get_ddl('PACKAGE_BODY', v_object_name, v_schema_name);
+
+        -- Check if the retrieved DDL is empty
+        IF v_ddl_clob IS NULL THEN
+            v_error_message := 'DDL retrieval returned NULL for PACKAGE_BODY ' || v_schema_name || '.' || v_object_name;
+            -- It's possible the package does not have a body, so we can skip this
+            CONTINUE;
+        END IF;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            v_error_message := 'Error getting DDL for PACKAGE_BODY ' || v_schema_name || '.' || v_object_name || ': ' || SQLERRM;
+            UTL_FILE.PUT_LINE(v_error_log, v_error_message);
+            CONTINUE;
+    END;
+
+    -- Replace spaces with underscores in the file name
+    v_file_name := REPLACE(v_schema_name || '_PACKAGE_BODY_' || v_object_name || '.sql', ' ', '_');
+
+    BEGIN
+        -- Open the file to write the package body DDL
+        v_file := UTL_FILE.FOPEN(v_package_dir, v_file_name, 'w', 32767);
+
+        -- Initialize variables for reading the CLOB
+        DECLARE
+            v_offset      NUMBER := 1;
+            v_chunk_size  NUMBER := 32767;
+            v_clob_length NUMBER := DBMS_LOB.GETLENGTH(v_ddl_clob);
+            v_buffer      VARCHAR2(32767);
+        BEGIN
+            -- Read and write the CLOB in chunks
+            WHILE v_offset <= v_clob_length LOOP
+                IF v_offset + v_chunk_size - 1 > v_clob_length THEN
+                v_chunk_size := v_clob_length - v_offset + 1;
+                END IF;
+
+                DBMS_LOB.READ(v_ddl_clob, v_chunk_size, v_offset, v_buffer);
+                UTL_FILE.PUT(v_file, v_buffer);
+
+                v_offset := v_offset + v_chunk_size;
+            END LOOP;
+        END;
+
+        -- Close the file
+        UTL_FILE.FCLOSE(v_file);
+
+        -- Increment the file count
+        v_file_count := v_file_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            v_error_message := 'Error writing DDL to file for PACKAGE_BODY ' || v_schema_name || '.' || v_object_name || ': ' || SQLERRM;
+            UTL_FILE.PUT_LINE(v_error_log, v_error_message);
+            IF UTL_FILE.IS_OPEN(v_file) THEN
+                UTL_FILE.FCLOSE(v_file);
+            END IF;
+    END;
+
+    EXCEPTION
+    WHEN OTHERS THEN
+        v_error_message := 'Unexpected error processing PACKAGE ' || v_schema_name || '.' || v_object_name || ': ' || SQLERRM;
+        UTL_FILE.PUT_LINE(v_error_log, v_error_message);
+        IF UTL_FILE.IS_OPEN(v_file) THEN
+            UTL_FILE.FCLOSE(v_file);
+        END IF;
+    END;
+END LOOP;
