@@ -19,3 +19,9 @@ Clean any previous runs
 ```
 
 To run DDL export, run the `EXPORT_DDL_DRIVER.sql` in Oracle as `dba` 
+
+# Contributors
+
+* Bill Than
+* Nathan Ackerson
+* Joshua Wry
