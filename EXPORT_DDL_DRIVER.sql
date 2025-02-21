@@ -1,6 +1,5 @@
 /*
 EXPORT_DDL.sql
-LRC Data and Advanced Analytics 
 
 Description:
    Exports DDL of database objects for DevOps tracking purposes
