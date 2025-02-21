@@ -22,6 +22,11 @@ Clean any previous runs
 
 To run DDL export, execute `EXPORT_DDL_DRIVER.sql` in Oracle as `dba` 
 
+
+# Error handling
+
+Errors are output to `error_log.txt`
+
 # Contributors
 
 * Bill Than
