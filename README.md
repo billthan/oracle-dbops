@@ -20,7 +20,7 @@ Clean any previous runs
 ./rm_sql_clean.sh
 ```
 
-To run DDL export, run the `EXPORT_DDL_DRIVER.sql` in Oracle as `dba` 
+To run DDL export, execute `EXPORT_DDL_DRIVER.sql` in Oracle as `dba` 
 
 # Contributors
 
