@@ -1,9 +1,19 @@
 /*
-EXPORT_DDL.sql
+EXPORT_DDL_DRIVER.sql
 
 Description:
    Exports DDL of database objects for DevOps tracking purposes
    Each object is put into a folder structure
+
+   Run as a DBA from the directory that holds the process_*.sql files, using a
+   client that supports SQL*Plus @ includes (SQL*Plus or SQLcl):
+
+      cd /path/to/oracle-dbops
+      sqlplus / as sysdba @EXPORT_DDL_DRIVER.sql
+
+   The process_*.sql files are text fragments included into the schema loop
+   below - they are not standalone scripts and share the variables declared
+   here. Output is written by UTL_FILE on the DATABASE SERVER, not the client.
 
 First time Setup:
 
@@ -18,12 +28,18 @@ First time Setup:
    CREATE OR REPLACE DIRECTORY DDL_PACKAGE_DIR AS '/aux/dbops/packages';
    CREATE OR REPLACE DIRECTORY DDL_PROCEDURE_DIR AS '/aux/dbops/procedures';
    CREATE OR REPLACE DIRECTORY DDL_TRIGGER_DIR AS '/aux/dbops/triggers';
+   CREATE OR REPLACE DIRECTORY DDL_INDEX_DIR AS '/aux/dbops/indexes';
    CREATE OR REPLACE DIRECTORY DDL_DIR AS '/exp1/ddl_dir2';
 
+Output:
+
+   <DIR>/<SCHEMA>_<OBJECT_TYPE>_<OBJECT_NAME>.sql - one file per object
+   DDL_DIR/summary.txt   - user, database, run time and file count
+   DDL_DIR/error_log.txt - per-object failures; review after every run
 
 For DevOps process:
 
-   At end of sprint - execute EXPORT_DDL.sql 
+   At end of sprint - execute EXPORT_DDL_DRIVER.sql 
    Create new branch on DevOps and copy contents of the script output
    Create PR once UAT testing is complete and merge to main
 

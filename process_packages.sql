@@ -1,4 +1,15 @@
 -- Process Packages
+-- Included by EXPORT_DDL_DRIVER.sql via @process_packages.sql. Not standalone:
+-- this is a fragment spliced into the driver's schema loop.
+-- Source:     DBA_OBJECTS where object_type = 'PACKAGE', for v_schema_name
+-- DDL types:  PACKAGE_SPEC and PACKAGE_BODY (two files per package)
+-- Output dir: v_package_dir (DDL_PACKAGE_DIR)
+-- File names: <SCHEMA>_PACKAGE_SPEC_<OBJECT_NAME>.sql
+--             <SCHEMA>_PACKAGE_BODY_<OBJECT_NAME>.sql
+-- Requires:   v_schema_name, v_object_name, v_ddl_clob, v_file, v_file_name,
+--             v_file_count, v_error_log, v_error_message, v_package_dir
+-- A package with no body is skipped without logging an error; other errors are
+-- written to v_error_log and the object is skipped.
 FOR rec_pkg IN (
     SELECT object_name
     FROM dba_objects

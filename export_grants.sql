@@ -1,4 +1,13 @@
    
+-- export_grants.sql
+-- Standalone script; not called by EXPORT_DDL_DRIVER.sql. Run as a DBA with
+-- SQL*Plus or SQLcl: sqlplus / as sysdba @export_grants.sql
+-- Generates replayable GRANT statements for the whole database.
+-- Output dir: GRANT_DIR
+-- Files:      all_grants_roles.sql     - role grants      (DBA_ROLE_PRIVS)
+--             all_grants_sys_privs.sql - system privileges (DBA_SYS_PRIVS)
+--             all_grants_tab_privs.sql - object privileges (DBA_TAB_PRIVS)
+-- ADMIN OPTION / GRANT OPTION are preserved in the generated statements.
    --CREATE OR REPLACE DIRECTORY GRANT_DIR AS '/aux/dbops/grants';
 DECLARE
     v_file      UTL_FILE.file_type;

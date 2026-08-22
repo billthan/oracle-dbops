@@ -1,3 +1,10 @@
+-- export_roles.sql
+-- Standalone script; not called by EXPORT_DDL_DRIVER.sql. Run as a DBA with
+-- SQL*Plus or SQLcl: sqlplus / as sysdba @export_roles.sql
+-- Generates replayable role definitions and role grants.
+-- Files:      ROLE_DIR/create_roles.sql - CREATE ROLE per row in DBA_ROLES
+--             GRANT_DIR/grant_roles.sql - role grants from DBA_ROLE_PRIVS
+-- Both ROLE_DIR and GRANT_DIR must exist before running this script.
 --CREATE OR REPLACE DIRECTORY ROLE_DIR AS '/aux/dbops/roles';
 DECLARE
     v_file       UTL_FILE.file_type;

@@ -1,4 +1,15 @@
 #!/bin/bash
+#
+# create_dirs.sh
+#
+# Creates the OS folder structure that the Oracle directory objects point at.
+# Run once on the DATABASE SERVER, as an OS user that can create these paths.
+# The directories must be writable by the OS user that owns the Oracle
+# processes, otherwise UTL_FILE raises ORA-29283 during the export.
+#
+# Folders not populated by the current scripts (sequences, synonyms, mviews,
+# types, dblinks, functions, libraries, users, profiles, privileges, contexts,
+# jobs) are placeholders reserved for future object types.
 
 # List of directories to be created
 directories=(

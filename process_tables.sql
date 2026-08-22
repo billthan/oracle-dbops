@@ -1,4 +1,14 @@
 -- Process Tables
+-- Included by EXPORT_DDL_DRIVER.sql via @process_tables.sql. Not standalone:
+-- this is a fragment spliced into the driver's schema loop.
+-- Source:     DBA_TABLES, restricted to the schema in v_schema_name
+-- DDL type:   TABLE
+-- Output dir: v_table_dir (DDL_TABLE_DIR)
+-- File name:  <SCHEMA>_TABLE_<OBJECT_NAME>.sql
+-- Requires:   v_schema_name, v_object_name, v_ddl_clob, v_file, v_file_name,
+--             v_file_count, v_error_log, v_error_message, v_table_dir
+-- Errors are written to v_error_log and the object is skipped, so a single
+-- failure does not abort the export.
 FOR rec_table IN (
     SELECT table_name
     FROM dba_tables

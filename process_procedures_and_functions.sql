@@ -1,4 +1,15 @@
 -- Process Procedures and Functions
+-- Included by EXPORT_DDL_DRIVER.sql via @process_procedures_and_functions.sql.
+-- Not standalone: this is a fragment spliced into the driver's schema loop.
+-- Source:     DBA_OBJECTS where object_type IN ('PROCEDURE','FUNCTION')
+-- DDL types:  PROCEDURE and FUNCTION
+-- Output dir: v_procedure_dir (DDL_PROCEDURE_DIR) -- functions land here too
+-- File name:  <SCHEMA>_<PROCEDURE|FUNCTION>_<OBJECT_NAME>.sql
+-- Requires:   v_schema_name, v_object_name, v_object_type, v_ddl_clob, v_file,
+--             v_file_name, v_file_count, v_error_log, v_error_message,
+--             v_procedure_dir
+-- Errors are written to v_error_log and the object is skipped, so a single
+-- failure does not abort the export.
 FOR rec_proc IN (
     SELECT object_name, object_type
     FROM dba_objects
