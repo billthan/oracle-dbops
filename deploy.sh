@@ -5,7 +5,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 sqlplus_bin="${SQLPLUS_BIN:-sqlplus}"
 output_path="${OUTPUT_PATH:-/aux/dbops}"
 
-if [[ $# -ne 1 ]]; then
+if [[ $# -ne 2 ]]; then
   echo "Usage: ORACLE_CONNECT_STRING=user/password@service $0 <output-path>" >&2
   exit 64
 fi
