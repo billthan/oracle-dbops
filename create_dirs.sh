@@ -1,29 +1,30 @@
 #!/bin/bash
 
+base_dir="${1:-/aux/dbops}"
+
 # List of directories to be created
 directories=(
-  "/aux/dbops/tables"
-  "/aux/dbops/views"
-  "/aux/dbops/packages"
-  "/aux/dbops/procedures"
-  "/aux/dbops/triggers"
-  "/aux/dbops/sequences"
-  "/aux/dbops/indexes"
-  "/aux/dbops/synonyms"
-  "/aux/dbops/mviews"
-  "/aux/dbops/types"
-  "/aux/dbops/dblinks"
-  "/aux/dbops/functions"
-  "/aux/dbops/libraries"
-  "/aux/dbops/users"
-  "/aux/dbops/roles"
-  "/aux/dbops/profiles"
-  "/aux/dbops/privileges"
-  "/aux/dbops/contexts"
-  "/aux/dbops/jobs"
-  "/aux/dbops/grants"
-  "/aux/dbops/roles"
-  "/exp1/ddl_dir2"
+  "$base_dir/tables"
+  "$base_dir/views"
+  "$base_dir/packages"
+  "$base_dir/procedures"
+  "$base_dir/triggers"
+  "$base_dir/sequences"
+  "$base_dir/indexes"
+  "$base_dir/synonyms"
+  "$base_dir/mviews"
+  "$base_dir/types"
+  "$base_dir/dblinks"
+  "$base_dir/functions"
+  "$base_dir/libraries"
+  "$base_dir/users"
+  "$base_dir/roles"
+  "$base_dir/profiles"
+  "$base_dir/privileges"
+  "$base_dir/contexts"
+  "$base_dir/jobs"
+  "$base_dir/grants"
+  "$base_dir/logs"
 )
 
 # Loop through the directory list
@@ -37,4 +38,3 @@ for dir in "${directories[@]}"; do
 done
 
 echo "All directories checked and created if necessary."
-

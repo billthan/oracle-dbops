@@ -48,6 +48,8 @@ DECLARE
    v_file_count    NUMBER := 0; -- Counter for number of files generated
    v_username      VARCHAR2(50);
    v_dbname        VARCHAR2(50);
+   v_db_version    VARCHAR2(50);
+   v_compatibility VARCHAR2(50);
    v_run_date      DATE := SYSDATE;
    v_error_message VARCHAR2(4000);
 BEGIN
@@ -66,6 +68,7 @@ BEGIN
 
    v_username := USER;
    v_dbname := SYS_CONTEXT('USERENV', 'DB_NAME');
+   DBMS_UTILITY.DB_VERSION(v_db_version, v_compatibility);
 
    -- Loop through all schemas, excluding system schemas and others
    FOR rec_schema IN (
@@ -102,6 +105,8 @@ BEGIN
    v_file := UTL_FILE.FOPEN(v_version_dir, 'summary.txt', 'w');
    UTL_FILE.PUT_LINE(v_file, 'Database user: ' || v_username);
    UTL_FILE.PUT_LINE(v_file, 'Database name: ' || v_dbname);
+   UTL_FILE.PUT_LINE(v_file, 'Database version: ' || v_db_version);
+   UTL_FILE.PUT_LINE(v_file, 'Database compatibility: ' || v_compatibility);
    UTL_FILE.PUT_LINE(v_file, 'Time run: ' || TO_CHAR(v_run_date, 'YYYY-MM-DD HH24:MI:SS'));
    UTL_FILE.PUT_LINE(v_file, 'Number of files generated: ' || v_file_count);
    UTL_FILE.FCLOSE(v_file);
