@@ -1,0 +1,10 @@
+version: 2
+updates:
+  # Keep the actions used by the CodeQL workflow patched. Actions are pinned to
+  # commit SHAs, so Dependabot is the mechanism that moves them forward.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
